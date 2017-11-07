@@ -5,21 +5,21 @@ volumes:
   vendor:
 services:
   # DB
-  db:
+  redminedb:
     image: mariadb:10.1.16
     volumes:
       - mariadb:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=redmine
-      - TZ: 'Asia/Tokyo'
+      - TZ='Asia/Tokyo'
   # rails アプリケーション
-  app:
+  redmineapp:
     build: .
     container_name: "railsdev"
     environment:
-      - RAILS_ENV: development
-      - TZ: 'Asia/Tokyo'
+      RAILS_ENV: development
+      TZ: 'Asia/Tokyo'
     ports:
       - "3000:3000"
     volumes:
@@ -28,4 +28,4 @@ services:
       # named volumeは一番最後じゃないとだめかもしれない。
       - vendor:/var/lib/redmine/vendor
     depends_on:
-      - db
+      - redminedb
