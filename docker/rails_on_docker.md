@@ -12,7 +12,7 @@ redmineを題材にして、Railsの開発環境をDcokerで構築する。
 * [Windows10 home または Windows8 以下でのDockerインストール](docker_toolbox_for_win.md)
 * [MacでのDockerインストール](docker_for_mac.md)
 
-このリポジトリにある、[docker-compose.yml](docker-compose.yml)と[Dockerfile](Dcokerfile)と[database.yml](database.yml)をひとつのフォルダにおく。  
+このリポジトリにある、[docker-compose.yml](docker-compose.yml)と[Dockerfile](Dockerfile)と[database.yml](database.yml)をひとつのフォルダにおく。  
 そして、同じフォルダに、redmineをチェックアウトする。  
 ```
 svn co https://svn.redmine.org/redmine/branches/3.4-stable/ ./redmine
@@ -168,7 +168,7 @@ docker exec -i -t railsdev bash
 ```
 docker stop railsdev
 ```
-止めたイメージを削除しておく。  
+止めたコンテナを削除しておく。あとで作り直したいから。  
 ```
 docker rm railsdev
 ```
@@ -178,7 +178,7 @@ redmineのコードを、 **ホスト** 側にダウンロードしておく。
 svn co https://svn.redmine.org/redmine/branches/3.4-stable/ ./redmine
 ```
 
-取ってきたら、コンテナを起動。  
+redmineを取ってきたら、コンテナを起動。  
 ```
 docker run --privileged -d -p 3000:3000 -v "$PWD/redmine:/var/lib/redmine" --name railsdev -t railsdevimg
 ```
@@ -212,7 +212,7 @@ volumes:
   vendor:
 ```
 
-LinuxやMacの場合は、`valumes`タグに直接ホスト側のディレクトリを指定すると上手く繋げてくれるが、Windowsの場合は、ウログラムが直接触るようなディレクトリは`named volume`を作ってやらないと上手くいかない。  
+LinuxやMacの場合は、`valumes`タグに直接ホスト側のディレクトリを指定すると上手く繋げてくれるが、Windowsの場合は、アプリケーションが直接触るようなディレクトリは`named volume`を作ってやらないと上手くいかない。  
 
 [docker-compose.yml](docker-compose.yml)と同じフォルダで、以下を実行。  
 ```
@@ -252,6 +252,7 @@ dcoker-machine ip default
 
 ## １日の仕事が終わって終了する場合。
 
+Windowsの場合は、docker-machineを止めてやらないと、シャットダウンができない。  
 ```
 docker-compose down
 docker-machine stop
